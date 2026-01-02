@@ -1,5 +1,18 @@
 ---
+import '../styles/main.css';
+
 const currentYear = new Date().getFullYear();
+const siteUrl = 'https://hadakoi.tech';
+
+// SEO metadata
+const seo = {
+  title: 'Aryan Kudva | Portfolio',
+  description: 'Aryan Kudva - Computer Science Student, Tech Enthusiast, and Security Researcher. Passionate about cybersecurity, Linux, and low-level systems.',
+  author: 'Aryan Kudva',
+};
+
+// Email protection (base64 encoded)
+const encodedEmail = btoa('aryguy2005@gmail.com');
 
 const ASCII_ART = `
                  _.---,_
@@ -36,6 +49,15 @@ const ASCII_ART = `
          /=" /  | "==\\
         / = (_  \\  "==\\
        ;="=   \\_)  =="\\`;
+
+// Tab configuration for maintainability
+const tabs = [
+  { id: 'projects', label: 'Projects', number: '01', subtitle: 'selected works', content: 'coming soon...' },
+  { id: 'experience', label: 'Experience', number: '02', subtitle: 'work history', content: 'coming soon...' },
+  { id: 'education', label: 'Education', number: '03', subtitle: 'academic background', content: 'coming soon...' },
+  { id: 'achievements', label: 'Achievements', number: '04', subtitle: 'awards & honors', content: 'coming soon...' },
+  { id: 'contact', label: 'Contact', number: '05', subtitle: 'get in touch', isContact: true },
+];
 ---
 
 <!DOCTYPE html>
@@ -44,29 +66,51 @@ const ASCII_ART = `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Aryan Kudva - Computer Science Student, Tech Enthusiast, and Security Researcher.">
-    <meta name="keywords" content="Aryan Kudva, Portfolio, Computer Science, Cybersecurity, Student">
-    <meta name="author" content="Aryan Kudva">
-    <meta name="theme-color" content="#000000">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Aryan Kudva</title>
-    <style>
-      @import '../styles/main.css';
-    </style>
+
+    <!-- Primary Meta Tags -->
+    <title>{seo.title}</title>
+    <meta name="title" content={seo.title}>
+    <meta name="description" content={seo.description}>
+    <meta name="author" content={seo.author}>
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content={siteUrl}>
+    <meta property="og:title" content={seo.title}>
+    <meta property="og:description" content={seo.description}>
+    <meta property="og:site_name" content="Aryan Kudva">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content={siteUrl}>
+    <meta name="twitter:title" content={seo.title}>
+    <meta name="twitter:description" content={seo.description}>
+
+    <!-- Canonical -->
+    <link rel="canonical" href={siteUrl}>
+
+    <!-- Theme & Icons -->
+    <meta name="theme-color" content="#050505">
+    <meta name="color-scheme" content="dark">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 </head>
 
 <body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <div class="container">
         <!-- Left Panel: Profile Info -->
-        <main class="left-panel">
+        <main class="left-panel" id="main-content">
             <div class="left-panel-content">
                 <header>
                     <h1>Aryan Kudva</h1>
                     <p class="subtitle">tech enthusiast, student, security-focused</p>
                 </header>
 
-                <section class="intro-section">
-                    <h2>Yahallo!</h2>
+                <section class="intro-section" aria-labelledby="intro-heading">
+                    <h2 id="intro-heading">Yahallo!</h2>
                     <div class="intro-text">
                         <p>I'm a computer science student with a strong interest in cybersecurity, Linux, and low-level systems.</p>
                         <p>Currently learning by building, researching, and contributing to student-led tech communities.</p>
@@ -75,107 +119,146 @@ const ASCII_ART = `
             </div>
 
             <div class="bottom-section">
-                <pre class="ascii-art" id="ascii-art-container" aria-hidden="true">{ASCII_ART}</pre>
-                <div class="quote-box">
-                    <p class="quote">The best way to predict the future is to invent it.</p>
-                    <span class="quote-author">- alan kay</span>
-                </div>
+                <pre class="ascii-art" aria-hidden="true">{ASCII_ART}</pre>
+                <figure class="quote-box">
+                    <blockquote class="quote">
+                        <p>The best way to predict the future is to invent it.</p>
+                    </blockquote>
+                    <figcaption class="quote-author">— Alan Kay</figcaption>
+                </figure>
             </div>
 
             <footer class="footer">
-                &copy; {currentYear} aryan kudva
+                <p>&copy; {currentYear} Aryan Kudva</p>
             </footer>
         </main>
 
-        <!-- Right Panel: Tabs -->
-        <section class="right-panel" id="accordion" aria-label="Projects and Experience">
+        <!-- Right Panel: Tab Navigation -->
+        <nav
+            class="right-panel"
+            role="tablist"
+            aria-label="Portfolio sections"
+        >
+            {tabs.map((tab, index) => (
+                <div
+                    class={`tab ${index === 0 ? 'active' : ''}`}
+                    role="tab"
+                    id={`tab-${tab.id}`}
+                    aria-selected={index === 0 ? 'true' : 'false'}
+                    aria-controls={`panel-${tab.id}`}
+                    tabindex={index === 0 ? '0' : '-1'}
+                >
+                    <span class="tab-label-vertical">{tab.label.toUpperCase()}</span>
+                    <span class="tab-number">{tab.number}</span>
 
-            <!-- Projects Tab (Active by default) -->
-            <article class="tab active" data-target="projects" tabindex="0" role="button" aria-expanded="true">
-                <div class="tab-label-vertical">PROJECTS</div>
-                <div class="tab-number">01</div>
-                <div class="tab-content">
-                    <h2>Projects</h2>
-                    <p class="tab-subtitle">selected works</p>
-                    <p class="coming-soon">coming soon...</p>
+                    <div
+                        class="tab-content"
+                        role="tabpanel"
+                        id={`panel-${tab.id}`}
+                        aria-labelledby={`tab-${tab.id}`}
+                    >
+                        <h2>{tab.label}</h2>
+                        <p class="tab-subtitle">{tab.subtitle}</p>
+                        {tab.isContact ? (
+                            <p class="coming-soon">
+                                <a
+                                    href="#"
+                                    class="contact-link"
+                                    data-email={encodedEmail}
+                                    aria-label="Send email"
+                                >
+                                    Loading...
+                                </a>
+                            </p>
+                        ) : (
+                            <p class="coming-soon">{tab.content}</p>
+                        )}
+                    </div>
                 </div>
-            </article>
-
-            <!-- Experience Tab -->
-            <article class="tab" data-target="experience" tabindex="0" role="button" aria-expanded="false">
-                <div class="tab-label-vertical">EXPERIENCE</div>
-                <div class="tab-number">02</div>
-                <div class="tab-content">
-                    <h2>Experience</h2>
-                    <p class="tab-subtitle">work history</p>
-                    <p class="coming-soon">coming soon...</p>
-                </div>
-            </article>
-
-            <!-- Education Tab -->
-            <article class="tab" data-target="education" tabindex="0" role="button" aria-expanded="false">
-                <div class="tab-label-vertical">EDUCATION</div>
-                <div class="tab-number">03</div>
-                <div class="tab-content">
-                    <h2>Education</h2>
-                    <p class="tab-subtitle">academic background</p>
-                    <p class="coming-soon">coming soon...</p>
-                </div>
-            </article>
-
-            <!-- Achievements Tab -->
-            <article class="tab" data-target="achievements" tabindex="0" role="button" aria-expanded="false">
-                <div class="tab-label-vertical">ACHIEVEMENTS</div>
-                <div class="tab-number">04</div>
-                <div class="tab-content">
-                    <h2>Achievements</h2>
-                    <p class="tab-subtitle">awards & honors</p>
-                    <p class="coming-soon">coming soon...</p>
-                </div>
-            </article>
-
-            <!-- Contact Tab -->
-            <article class="tab" data-target="contact" tabindex="0" role="button" aria-expanded="false">
-                <div class="tab-label-vertical">CONTACT</div>
-                <div class="tab-number">05</div>
-                <div class="tab-content">
-                    <h2>Contact</h2>
-                    <p class="tab-subtitle">get in touch</p>
-                    <p class="coming-soon">aryguy2005@gmail.com</p>
-                </div>
-            </article>
-
-        </section>
+            ))}
+        </nav>
     </div>
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        const tabs = document.querySelectorAll('.tab');
+        // Tab Navigation
+        const tablist = document.querySelector('[role="tablist"]');
+        const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
 
-        tabs.forEach(tab => {
-          tab.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              activateTab(tab);
-            }
-          });
+        // Activate tab function
+        function activateTab(tab: HTMLElement) {
+          const activeTab = document.querySelector('[role="tab"][aria-selected="true"]');
+          if (activeTab === tab) return;
 
-          tab.addEventListener('click', () => {
-            activateTab(tab);
-          });
-        });
-
-        function activateTab(tab) {
-          if (tab.classList.contains('active')) return;
-
+          // Deactivate all tabs
           tabs.forEach(t => {
             t.classList.remove('active');
-            t.setAttribute('aria-expanded', 'false');
+            t.setAttribute('aria-selected', 'false');
+            t.setAttribute('tabindex', '-1');
           });
 
+          // Activate selected tab
           tab.classList.add('active');
-          tab.setAttribute('aria-expanded', 'true');
+          tab.setAttribute('aria-selected', 'true');
+          tab.setAttribute('tabindex', '0');
+          tab.focus();
         }
+
+        // Click handler
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => activateTab(tab as HTMLElement));
+        });
+
+        // Keyboard navigation (arrow keys, home, end)
+        tablist?.addEventListener('keydown', (e: KeyboardEvent) => {
+          const currentIndex = tabs.findIndex(t => t === document.activeElement);
+          let newIndex = currentIndex;
+
+          switch (e.key) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+              e.preventDefault();
+              newIndex = (currentIndex + 1) % tabs.length;
+              break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+              e.preventDefault();
+              newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+              break;
+            case 'Home':
+              e.preventDefault();
+              newIndex = 0;
+              break;
+            case 'End':
+              e.preventDefault();
+              newIndex = tabs.length - 1;
+              break;
+            case 'Enter':
+            case ' ':
+              e.preventDefault();
+              activateTab(tabs[currentIndex] as HTMLElement);
+              return;
+            default:
+              return;
+          }
+
+          (tabs[newIndex] as HTMLElement).focus();
+        });
+
+        // Email Protection - Decode and display
+        const emailLinks = document.querySelectorAll('[data-email]');
+        emailLinks.forEach(link => {
+          const encoded = link.getAttribute('data-email');
+          if (encoded) {
+            try {
+              const decoded = atob(encoded);
+              link.setAttribute('href', `mailto:${decoded}`);
+              link.textContent = decoded;
+            } catch {
+              link.textContent = 'Contact via form';
+            }
+          }
+        });
       });
     </script>
 </body>
